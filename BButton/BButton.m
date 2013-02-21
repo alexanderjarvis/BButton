@@ -46,6 +46,7 @@
     self.backgroundColor = [UIColor clearColor];
     self.color = [UIColor colorWithRed:0.00f green:0.33f blue:0.80f alpha:1.00f];
     self.titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
+    self.rounded = NO;
 }
 
 - (void) setHighlighted:(BOOL)highlighted {
@@ -110,6 +111,11 @@
     [self setColor:color];
 }
 
+- (void)setRounded:(BOOL)rounded
+{
+    _rounded = rounded;
+    [self setNeedsDisplay];
+}
 
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
@@ -125,21 +131,26 @@
     CGSize shadowOffset = CGSizeMake(0, 1);
     CGFloat shadowBlurRadius = 2;
     
-    //// Rounded Rectangle Drawing
-    UIBezierPath* roundedRectanglePath = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(0.5, 0.5, rect.size.width-1.0, rect.size.height-1.0) cornerRadius: 6];
+    //// Path Drawing
+    UIBezierPath *path;
+    if (_rounded) {
+        path = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(0.5, 0.5, rect.size.width-1.0, rect.size.height-1.0) cornerRadius: rect.size.width/2];
+    } else {
+        path = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(0.5, 0.5, rect.size.width-1.0, rect.size.height-1.0) cornerRadius: 6];
+    }
     CGContextSaveGState(context);
-    [roundedRectanglePath addClip];
+    [path addClip];
     CGContextDrawLinearGradient(context, _gradient, CGPointMake(0.0, self.highlighted ? rect.size.height-0.5 : 0.5), CGPointMake(0.0, self.highlighted ? 0.5 : rect.size.height-0.5), 0);
     CGContextRestoreGState(context);
     
     if (!self.highlighted) {
         ////// Rounded Rectangle Inner Shadow
-        CGRect roundedRectangleBorderRect = CGRectInset([roundedRectanglePath bounds], -shadowBlurRadius, -shadowBlurRadius);
+        CGRect roundedRectangleBorderRect = CGRectInset([path bounds], -shadowBlurRadius, -shadowBlurRadius);
         roundedRectangleBorderRect = CGRectOffset(roundedRectangleBorderRect, -shadowOffset.width, -shadowOffset.height);
-        roundedRectangleBorderRect = CGRectInset(CGRectUnion(roundedRectangleBorderRect, [roundedRectanglePath bounds]), -1, -1);
+        roundedRectangleBorderRect = CGRectInset(CGRectUnion(roundedRectangleBorderRect, [path bounds]), -1, -1);
         
         UIBezierPath* roundedRectangleNegativePath = [UIBezierPath bezierPathWithRect: roundedRectangleBorderRect];
-        [roundedRectangleNegativePath appendPath: roundedRectanglePath];
+        [roundedRectangleNegativePath appendPath: path];
         roundedRectangleNegativePath.usesEvenOddFillRule = YES;
         
         CGContextSaveGState(context);
@@ -151,7 +162,7 @@
                                         shadowBlurRadius,
                                         shadow.CGColor);
             
-            [roundedRectanglePath addClip];
+            [path addClip];
             CGAffineTransform transform = CGAffineTransformMakeTranslation(-round(roundedRectangleBorderRect.size.width), 0);
             [roundedRectangleNegativePath applyTransform: transform];
             [[UIColor grayColor] setFill];
@@ -161,8 +172,8 @@
     }
         
     [border setStroke];
-    roundedRectanglePath.lineWidth = 1;
-    [roundedRectanglePath stroke];
+    path.lineWidth = 1;
+    [path stroke];
 }
 
 - (UIColor *)lightenColor:(UIColor *)oldColor value:(float)value {
