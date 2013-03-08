@@ -52,7 +52,7 @@
     self.backgroundColor = [UIColor clearColor];
     self.color = [UIColor colorWithRed:0.00f green:0.33f blue:0.80f alpha:1.00f];
     self.titleLabel.shadowOffset = CGSizeMake(0.0, -1.0);
-    self.rounded = NO;
+    self.circular = NO;
 }
 
 - (void) setHighlighted:(BOOL)highlighted {
@@ -119,9 +119,9 @@
     [self setColor:color];
 }
 
-- (void)setRounded:(BOOL)rounded
+- (void)setCircular:(BOOL)circular
 {
-    _rounded = rounded;
+    _circular = circular;
     [self setNeedsDisplay];
 }
 

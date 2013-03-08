@@ -24,7 +24,7 @@ typedef enum {
 }
 
 @property (nonatomic, assign) UIColor *color;
-@property (nonatomic) BOOL rounded;
+@property (nonatomic) BOOL circular;
 
 - (void)setType:(BButtonType)type;
 
