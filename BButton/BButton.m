@@ -141,7 +141,7 @@
     
     //// Path Drawing
     UIBezierPath *path;
-    if (_rounded) {
+    if (_circular) {
         path = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(0.5, 0.5, rect.size.width-1.0, rect.size.height-1.0) cornerRadius: rect.size.width/2];
     } else {
         path = [UIBezierPath bezierPathWithRoundedRect: CGRectMake(0.5, 0.5, rect.size.width-1.0, rect.size.height-1.0) cornerRadius: 6];
