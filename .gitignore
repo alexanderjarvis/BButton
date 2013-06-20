@@ -1,0 +1,7 @@
+.DS_Store
+.gitignore
+
+/build/
+
+BButtonDemo.xcodeproj/project.xcworkspace/xcuserdata/jesse.xcuserdatad/
+BButtonDemo.xcodeproj/xcuserdata/jesse.xcuserdatad/
