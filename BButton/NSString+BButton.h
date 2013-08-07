@@ -33,7 +33,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSString (FontAwesome)
+@interface NSString (BButton)
 
 - (NSString *)trimWhitespace;
 - (BOOL)isEmpty;
